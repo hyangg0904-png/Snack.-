@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snack-24 | 초대박 할인! 프리미엄 스낵 마켓</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --brand-color: #E33539;
+            --brand-dark: #C62828;
+            --bg-body: #F5F5F5;
+            --text-main: #222222;
+            --text-sub: #777777;
+            --text-hidden: #D3D3D3;
+            --border-light: #EAEAEA;
+            --white: #FFFFFF;
+            --gold: #FFD700;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-body); color: var(--text-main); line-height: 1.5; overflow-x: hidden; }
+        button { cursor: pointer; font-family: inherit; }
+        input, select { font-family: inherit; }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Commercial Ticker --- */
+        .ticker-wrap { background: var(--brand-dark); color: #fff; padding: 6px 0; overflow: hidden; font-size: 13px; font-weight: bold; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; padding-left: 100%; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .ticker span { margin-right: 40px; color: #FFF9C4; }
+
+        /* --- Top & Header --- */
+        .top-bar { background: var(--bg-body); padding: 8px 24px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); }
+        .top-bar .highlight { color: var(--brand-color); font-weight: bold; }
+        header { background: var(--white); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 100;}
+        .logo { font-size: 32px; font-weight: 900; color: var(--brand-color); letter-spacing: -1.5px; cursor: pointer; text-shadow: 2px 2px 0px rgba(227, 53, 57, 0.1); }
+        .search-bar { display: flex; width: 400px; border: 3px solid var(--brand-color); border-radius: 8px; overflow: hidden; }
+        .search-bar input { flex: 1; padding: 10px 15px; border: none; outline: none; font-size: 14px; font-weight: 600;}
+        .search-bar button { background: var(--brand-color); color: white; border: none; padding: 0 25px; font-weight: bold; font-size: 15px;}
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .user-points { font-size: 14px; font-weight: bold; background: #fff0f0; padding: 6px 12px; border-radius: 20px; color: var(--brand-color); border: 1px solid #ffcdd2;}
+        .cart-btn { background: none; border: none; font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 6px; position: relative; }
+        .cart-badge { background: var(--brand-color); color: white; font-size: 11px; padding: 2px 6px; border-radius: 10px; position: absolute; top: -10px; right: -15px; }
+
+        /* --- Navigation --- */
+        .nav-bar { background: var(--white); padding: 12px 24px; border-bottom: 1px solid var(--border-light); display: flex; gap: 24px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .nav-item { cursor: pointer; color: var(--text-main); padding-bottom: 4px; border-bottom: 3px solid transparent; transition: 0.2s;}
+        .nav-item:hover, .nav-item.active { color: var(--brand-color); border-bottom-color: var(--brand-color); }
+        
+        /* --- Layout --- */
+        .container { max-width: 1280px; margin: 24px auto; padding: 0 24px; display: flex; gap: 24px; align-items: flex-start; }
+        .main-content { flex: 1; min-width: 0; }
+        
+        /* --- Hero Banner --- */
+        .hero { background: linear-gradient(135deg, #111, #333); color: white; border-radius: 16px; padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; position: relative; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); overflow:hidden;}
+        .hero::after { content: 'SALE'; position: absolute; right: -20px; bottom: -30px; font-size: 150px; font-weight: 900; opacity: 0.05; letter-spacing: -5px;}
+        .hero h2 { font-size: 38px; font-weight: 900; margin-bottom: 10px; line-height: 1.2;}
+        .hero .highlight { color: #FFEB3B; font-size: 48px; text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);}
+        .timer-box { display: inline-block; background: var(--brand-color); color: white; padding: 10px 20px; font-size: 28px; font-weight: 900; border-radius: 8px; margin: 20px 0; letter-spacing: 2px; width: max-content; box-shadow: 0 5px 15px rgba(227, 53, 57, 0.4);}
+        .hero-btn { background: #FFEB3B; color: #111; border: none; padding: 14px 28px; font-size: 18px; font-weight: 900; border-radius: 8px; width: max-content; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+
+        /* --- Product Grid & Cards --- */
+        .section-title { font-size: 22px; font-weight: 900; margin-bottom: 20px; display: flex; align-items: center; gap:8px;}
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .product-card { background: var(--white); border-radius: 12px; padding: 16px; position: relative; border: 1px solid var(--border-light); transition: transform 0.2s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--brand-color);}
+        
+        .img-wrap { position: relative; width: 100%; }
+        .discount-badge { position: absolute; top: 10px; left: 10px; background: var(--brand-color); color: white; font-size: 14px; font-weight: 900; padding: 6px 10px; border-radius: 6px; z-index: 10; box-shadow: 0 4px 8px rgba(227, 53, 57, 0.3);}
+        .rank-badge { position: absolute; top: 16px; right: 16px; background: #FFEB3B; color: #111; font-size: 16px; font-weight: 900; padding: 6px 12px; border-radius: 50%; z-index: 10; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center;}
+        
+        .product-img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background:#eee; }
+        
+        .commercial-info { font-size: 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;}
+        .commercial-info .stars { color: var(--gold); letter-spacing: -2px; font-size: 14px;}
+        .commercial-info .sales { color: #888; font-weight: bold;}
+        .hot-tag { color: var(--brand-color); font-weight: 800; font-size: 11px; animation: blink 1s infinite;}
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .product-name { font-size: 16px; font-weight: 800; margin-bottom: 8px; line-height: 1.3;}
+        .price-wrap { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 12px; }
+        .price-sale { color: var(--brand-color); font-size: 22px; font-weight: 900; line-height: 1;}
+        .price-orig { color: var(--text-sub); font-size: 14px; text-decoration: line-through; margin-bottom: 2px;}
+        
+        /* Quantity Selector */
+        .qty-selector { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-light); border-radius: 6px; margin-bottom: 10px; overflow: hidden; background: #fafafa;}
+        .qty-selector button { background: #f0f0f0; border: none; width: 36px; height: 36px; font-weight: bold; font-size: 18px; cursor: pointer; color: #333;}
+        .qty-selector button:hover { background: #e0e0e0; }
+        .qty-selector span { font-size: 15px; font-weight: 800; flex: 1; text-align: center; }
+
+        .add-to-cart-btn { width: 100%; padding: 14px; background: white; border: 2px solid var(--brand-color); color: var(--brand-color); border-radius: 8px; font-weight: 900; font-size:15px; transition: 0.2s;}
+        .add-to-cart-btn:hover { background: var(--brand-color); color: white; }
+
+        /* --- List View (Ranking 탭 전용 레이아웃) --- */
+        .list-view { display: flex; flex-direction: column; gap: 15px; }
+        .list-view .product-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 20px 25px; }
+        .list-view .card-left { display: flex; align-items: center; gap: 25px; flex: 1; margin-right: 20px;}
+        .list-view .rank-badge { position: static; width: 48px; height: 48px; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .list-view .img-wrap { width: 110px; height: 110px; flex-shrink: 0; margin-bottom: 0;}
+        .list-view .product-img { width: 100%; height: 100%; margin-bottom: 0; border-radius: 10px;}
+        .list-view .discount-badge { top: -6px; left: -6px; font-size: 12px; padding: 4px 8px; }
+        .list-view .info-wrap { display: flex; flex-direction: column; justify-content: center; }
+        .list-view .product-name { font-size: 18px; }
+        .list-view .price-wrap { margin-bottom: 0; }
+        .list-view .card-right { display: flex; align-items: center; gap: 15px; }
+        .list-view .qty-selector { margin-bottom: 0; width: 120px; height: 46px; }
+        .list-view .qty-selector button { width: 36px; height: 100%; }
+        .list-view .add-to-cart-btn { width: auto; padding: 0 24px; height: 46px; }
+
+        /* --- Modals & Dark Patterns --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 1000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px);}
+        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 420px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color:#999; }
+        
+        /* Auth Tabs */
+        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 2px solid var(--border-light); }
+        .auth-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: 900; font-size: 18px; color: #aaa; transition: 0.2s; }
+        .auth-tab.active-tab { color: var(--brand-color); border-bottom: 3px solid var(--brand-color); }
+
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group input { width: 100%; padding: 14px; padding-right: 60px; border: 1px solid var(--border-light); border-radius: 8px; font-weight: 600;}
+        .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--brand-color); font-weight: 800; font-size: 13px; cursor: pointer; }
+        
+        .pw-guide { font-size: 11px; color: var(--brand-color); margin-top: -10px; margin-bottom: 15px; display: block; font-weight: 600;}
+        .btn-full { width: 100%; padding: 16px; background: var(--brand-color); color: white; font-weight: 900; border: none; border-radius: 8px; font-size: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(227, 53, 57, 0.3);}
+
+        .dark-terms { font-size: 12px; color: var(--text-sub); margin-top: 20px; border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #fafafa;}
+        .dark-terms label { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 8px; cursor: pointer; line-height: 1.4; font-weight: 600;}
+        .sneaky-text { color: var(--text-hidden); font-size: 10px; font-weight: normal;} 
+
+        /* --- 회원탈퇴 모달 전용 버튼 --- */
+        .withdraw-confirm-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
+        .btn-stay { background: var(--brand-color); color: white; padding: 16px; border: none; border-radius: 8px; font-weight: 900; font-size: 16px; box-shadow: 0 4px 10px rgba(227, 53, 57, 0.3);}
+        .btn-leave { background: white; color: #ddd; border: 1px solid #eee; padding: 12px; border-radius: 8px; font-size: 12px; font-weight: 600;}
+
+        /* --- 장바구니 & 쿠폰 --- */
+        .cart-sidebar { position: fixed; top: 0; right: -450px; width: 450px; height: 100%; background: white; z-index: 1001; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        .cart-sidebar.active { right: 0; }
+        .cart-header { padding: 20px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+        .cart-item { display: flex; gap: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 16px; margin-bottom: 16px; }
+        .cart-item img { width: 90px; height: 90px; border-radius: 8px; object-fit: cover; border: 1px solid #eee;}
+        
+        .cart-qty-ctrl { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 6px; width: max-content; overflow: hidden; margin-top: 8px; background: #fafafa;}
+        .cart-qty-ctrl button { background: none; border: none; width: 30px; height: 30px; font-weight: bold; font-size: 16px;}
+        .cart-qty-ctrl span { font-size: 14px; font-weight: 800; width: 30px; text-align: center; }
+
+        .cart-footer { padding: 24px; border-top: 1px solid var(--border-light); background: #fafafa; }
+        .hidden-charge { font-size: 11px; color: var(--brand-color); margin-bottom: 15px; text-align: center; font-weight: bold;}
+        
+        .coupon-box { margin-bottom: 15px; }
+        .coupon-box select { width: 100%; padding: 12px; border: 1px solid var(--brand-color); border-radius: 8px; font-size: 14px; font-weight: 700; background: #fff0f0; color: var(--brand-color);}
+        
+        .cart-summary-line { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 8px; color: var(--text-sub); font-weight: 600;}
+        .cart-total-line { display: flex; justify-content: space-between; font-size: 20px; font-weight: 900; margin-bottom: 16px; margin-top: 10px; border-top: 2px solid #ddd; padding-top: 15px; }
+
+        /* --- 팝업 --- */
+        .popup-bomb { position: fixed; background: white; width: 320px; border-radius: 16px; text-align: center; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 9999; border: 3px solid var(--brand-color); }
+        .popup-1 { top: 10%; left: 8%; }
+        .popup-2 { top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; width: 350px;}
+        .popup-3 { bottom: 10%; right: 8%; }
+        .popup-bomb h3 { color: var(--brand-dark); margin-bottom: 12px; font-size:20px; font-weight: 900;}
+        .popup-bomb p { font-size:15px; margin-bottom:15px; word-break:keep-all; font-weight: 600;}
+        .popup-bomb img { width:100%; border-radius:10px; margin-bottom:15px; height:150px; object-fit:cover;}
+        
+        .popup-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 12px; color: #888; border-top: 1px solid #eee; padding-top: 12px; font-weight: 600;}
+        .popup-footer label { cursor: pointer; display: flex; align-items: center; gap:4px; }
+        .popup-footer button { background: none; border: none; color: #888; cursor: pointer; text-decoration: underline; font-size: 12px; font-weight: 600;}
+
+        /* --- 마이페이지 --- */
+        .mypage-wrap { background: white; padding: 40px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+        .mypage-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
+        .profile-pic { width: 80px; height: 80px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 10px rgba(227, 53, 57, 0.3);}
+        .mypage-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 40px; }
+        .stat-box { background: #fafafa; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #eee;}
+        .stat-box h4 { font-size: 14px; color: var(--text-sub); margin-bottom: 8px; font-weight: 700;}
+        .stat-box p { font-size: 26px; font-weight: 900; color: var(--brand-color); }
+        
+        .order-history { margin-bottom: 40px; }
+        .order-history h3 { font-size: 20px; font-weight: 900; margin-bottom: 15px; }
+        .empty-history { text-align: center; padding: 50px; background: #fafafa; border-radius: 12px; color: #999; font-size: 15px; font-weight: 600;}
+        .order-card { background: white; border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 15px; font-size: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
+        .order-card-date { font-weight: 800; color: var(--text-sub); margin-bottom: 10px; font-size: 13px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
+
+        .withdraw-btn { background: none; border: none; color: #ccc; font-size: 13px; text-decoration: underline; cursor: pointer; float: right; margin-top:20px; font-weight: 600;}
+
+        /* Pages */
+        .page-view { display: none; }
+        .page-view.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>🔥 [속보] 회원가입 5,000P 즉시 지급 이벤트 진행 중!</span>
+            <span>🛒 김*영님 방금 '롯데웰푸드 ABC 초코쿠키 쿠키앤크림 130g' 5개 구매!</span>
+            <span>🚨 '몬스터 에너지 망고로코 (355ML)' 재고 3개 남았습니다!</span>
+            <span>👑 심*인님 VVIP 멤버십 업그레이드 완료!</span>
+            <span>🔥 [속보] 회원가입 5,000P 즉시 지급 이벤트 진행 중!</span>
+        </div>
+    </div>
+
+    <div class="popup-bomb popup-1" id="pop1">
+        <h3>🎁 선착순 가입 쿠폰</h3>
+        <p>지금 3분 안에 가입하면<br><b>5,000P</b> 즉시 통장 꽂힙니다!</p>
+        <button class="btn-full" onclick="openAuthModal('signup'); document.getElementById('pop1').style.display='none';">⚡ 1초만에 혜택 받기</button>
+        <div class="popup-footer">
+            <label><input type="checkbox"> 일주일 동안 보지 않기</label>
+            <button onclick="document.getElementById('pop1').style.display='none'">닫기</button>
+        </div>
+    </div>
+    <div class="popup-bomb popup-2" id="pop2">
+        <h3>🚨 마감 임박 타임 세일 🚨</h3>
+        <img src="https://static.megamart.com/product/image/0879/08793102/08793102_1_960.jpg">
+        <p>ABC 초코쿠키 단독 <b>80% 미친 할인!</b><br><span style="color:var(--brand-color); font-size:12px;">현재 142명이 이 상품을 보고 있습니다.</span></p>
+        <button class="btn-full" onclick="switchPage('special'); document.getElementById('pop2').style.display='none';">특가 낚아채기 ></button>
+        <div class="popup-footer">
+            <label><input type="checkbox"> 일주일 동안 보지 않기</label>
+            <button onclick="document.getElementById('pop2').style.display='none'">닫기</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAuthModal()">✕</button>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab" id="tabLogin" onclick="switchAuthTab('login')">로그인</div>
+                <div class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">회원가입</div>
+            </div>
+            
+            <div id="loginForm" style="display: none;">
+                <div class="input-group"><input type="text" id="loginId" placeholder="아이디"></div>
+                <div class="input-group">
+                    <input type="password" id="loginPw" placeholder="비밀번호">
+                    <button type="button" class="pw-toggle" onclick="togglePw('loginPw', this)">보기</button>
+                </div>
+                <button class="btn-full" onclick="processLogin()">로그인</button>
+            </div>
+
+            <div id="signupForm" style="display: none;">
+                <div class="input-group"><input type="text" id="signupId" placeholder="아이디"></div>
+                <div class="input-group">
+                    <input type="password" id="signupPw" placeholder="비밀번호">
+                    <button type="button" class="pw-toggle" onclick="togglePw('signupPw', this)">보기</button>
+                </div>
+                <span class="pw-guide">* 소문자, 특수기호(!@#$등) 포함 8자리 이상 필수</span>
+                
+                <div class="dark-terms">
+                    <label><input type="checkbox" id="term1" checked> <span>[필수] 서비스 이용약관 동의</span></label>
+                    <label><input type="checkbox" id="term2" checked> <span>[필수] 개인정보 수집 및 이용 동의</span></label>
+                    <label class="sneaky-text"><input type="checkbox" id="darkPatternSub" checked> <span>[선택] 프리미엄 멤버십 (월 1,000P 자동결제) 가입 동의</span></label>
+                </div>
+                <button class="btn-full" onclick="processSignup()">가입하고 혜택 받기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="withdrawModal1">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="margin-bottom:10px; font-size:24px; color:var(--brand-color); font-weight:900;">정말 저희를 떠나시나요? 🥺</h2>
+            <p style="color:#111; font-weight:800; margin-bottom:10px; font-size:16px;">보유하신 포인트와 특급 혜택이 즉시 증발합니다!</p>
+            <p style="font-size:13px; color:#666; margin-bottom:20px;">한 번 탈퇴하면 복구가 절대 불가능합니다.</p>
+            <div class="withdraw-confirm-btns">
+                <button class="btn-stay" onclick="document.getElementById('withdrawModal1').style.display='none'">탈퇴 취소하고 포인트 유지하기</button>
+                <button class="btn-leave" onclick="document.getElementById('withdrawModal1').style.display='none'; document.getElementById('withdrawModal2').style.display='flex';">그래도 탈퇴 진행하기</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="withdrawModal2">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="margin-bottom:15px; font-size:22px; font-weight:900;">마지막 확인</h2>
+            <p style="font-size:15px; margin-bottom:25px; line-height:1.6; font-weight:600;">모든 규정을 확인하였으며,<br>이에 동의하십니까?</p>
+            <div style="display:flex; gap:10px;">
+                <button style="flex:1; background:var(--brand-color); color:white; border:none; padding:15px; border-radius:8px; font-weight:900; font-size:15px;" onclick="document.getElementById('withdrawModal2').style.display='none'; alert('현명한 선택입니다! 혜택이 유지됩니다.');">동의합니다 (탈퇴 취소)</button>
+                <button style="flex:1; background:#f0f0f0; color:#999; border:none; padding:15px; border-radius:8px; font-size:12px; font-weight:600;" onclick="executeWithdraw()">동의하지 않음 (탈퇴 처리)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <span>🎉 회원가입 시 <span class="highlight">5,000P 즉시 지급!</span></span>
+        <div id="topAuthLinks" style="display:flex; gap:12px; font-weight:bold; cursor:pointer;">
+            <span onclick="openAuthModal('login')">로그인</span> |
+            <span onclick="openAuthModal('signup')">회원가입</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo" onclick="switchPage('home')">Snack-24</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="찾고 싶은 과자 폭풍 검색!" onkeypress="if(event.keyCode===13) executeSearch()">
+            <button onclick="executeSearch()">검색</button>
+        </div>
+        <div class="header-right">
+            <div class="user-points" onclick="switchPage('mypage')" style="cursor:pointer;">내 포인트: <span id="my-pts">0</span> P</div>
+            <button class="cart-btn" onclick="toggleCart()">🛒 장바구니 <span class="cart-badge" id="cart-count">0</span></button>
+        </div>
+    </header>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="filterCategory('all', this)">전체 상품</div>
+        <div class="nav-item" onclick="filterCategory('snack', this)">스낵 (과자)</div>
+        <div class="nav-item" onclick="filterCategory('drink', this)">음료</div>
+        <div class="nav-item" style="color:var(--brand-color);" onclick="switchPage('special', this)">🔥 초특가 마감임박</div>
+        <div class="nav-item" style="color:#FF9800;" onclick="switchPage('ranking', this)">🏆 인기 랭킹</div>
+        <div class="nav-item" onclick="switchPage('mypage', this)">마이페이지</div>
+    </div>
+
+    <div class="container">
+        <div class="main-content page-view active" id="page-home">
+            <div class="hero">
+                <h2>오늘 단 하루!<br>전 상품 최대 <span class="highlight">80% 할인</span></h2>
+                <div class="timer-box" id="mainTimer">00 : 00 : 00</div>
+                <button class="hero-btn" onclick="switchPage('special', document.querySelectorAll('.nav-item')[3])">특가 털러가기 ></button>
+            </div>
+            <div class="section-title">📦 전체 상품 리스트</div>
+            <div class="product-grid" id="grid"></div>
+        </div>
+
+        <div class="main-content page-view" id="page-special">
+            <div style="background:#ffebee; border-left:6px solid var(--brand-color); padding:25px; margin-bottom:25px; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h2 style="color:var(--brand-dark); font-weight:900; font-size:24px; margin-bottom:5px;">⚡ 피 터지는 마감 임박 타임 특가!</h2>
+                <p style="font-weight:600; color:#444;">할인율 50% 이상 상품만 모았습니다. 물량 소진 시 조기 종료! 남은 시간: <b id="specialTimer" style="color:var(--brand-color); font-size:18px;">00:00:00</b></p>
+            </div>
+            <div class="product-grid" id="grid-special"></div>
+        </div>
+
+        <div class="main-content page-view" id="page-ranking">
+            <div style="background:linear-gradient(to right, #FFF9C4, #FFF59D); border-left:6px solid #FBC02D; padding:25px; margin-bottom:25px; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h2 style="color:#F57F17; font-weight:900; font-size:24px; margin-bottom:5px;">🏆 스낵24 실시간 베스트셀러</h2>
+                <p style="font-weight:600; color:#444;">가장 많이 팔린 인기 상품 랭킹입니다. 실패 없는 선택!</p>
+            </div>
+            <div class="list-view" id="grid-ranking"></div>
+        </div>
+
+        <div class="main-content page-view" id="page-mypage">
+            <div class="mypage-wrap">
+                <div class="mypage-header">
+                    <div class="profile-pic">👤</div>
+                    <div>
+                        <h2 style="margin-bottom:5px; font-weight:900; font-size:24px;"><span id="mypage-name">비회원</span>님, 환영합니다!</h2>
+                        <p style="color:var(--text-sub); font-size:15px; font-weight:600;">현재 등급: <span id="mypage-tier"><span style="color:#999;">등급 없음 (로그인 필요)</span></span></p>
+                    </div>
+                </div>
+
+                <div class="mypage-stats">
+                    <div class="stat-box">
+                        <h4>💰 사용 가능 포인트</h4>
+                        <p><span id="mypage-pts">0</span> P</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>🎟 사용 가능 쿠폰</h4>
+                        <p id="mypage-coupon-count">0 장</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>🛒 장바구니 상품</h4>
+                        <p id="mypage-cart-count">0 개</p>
+                    </div>
+                </div>
+
+                <div class="order-history">
+                    <h3>📦 최근 주문 내역</h3>
+                    <div id="orderHistoryContainer">
+                        <div class="empty-history">최근 주문한 내역이 없습니다.<br>진행 중인 초특가를 확인해보세요!</div>
+                    </div>
+                </div>
+
+                <hr style="border:none; border-top:1px solid #eee; margin:30px 0;">
+                <button class="withdraw-btn" onclick="checkWithdraw()">서비스 해지 및 회원탈퇴</button>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cartOverlay" onclick="toggleCart()" style="display: none; justify-content:flex-end;"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2 style="font-weight:900;">장바구니</h2>
+            <button class="modal-close" style="position:static;" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        
+        <div class="cart-footer">
+            <div class="coupon-box">
+                <select id="couponSelect" onchange="updateCartUI()">
+                    <option value="">🎫 쿠폰 선택 (적용 안함)</option>
+                </select>
+            </div>
+
+            <div class="hidden-charge">
+                <label style="cursor:pointer;"><input type="checkbox" id="hiddenSubscription" checked> (필수) 결제 시 '안심 퀵 배송료' 10,000P 추가 차감 동의</label>
+            </div>
+            
+            <div class="cart-summary-line">
+                <span>상품 총액</span>
+                <span id="cart-subtotal" style="font-weight:800;">0 P</span>
+            </div>
+            <div class="cart-summary-line" style="color: #2196F3;">
+                <span>쿠폰 할인</span>
+                <span id="cart-discount" style="font-weight:800;">- 0 P</span>
+            </div>
+            <div class="cart-total-line">
+                <span>최종 결제 금액</span>
+                <span style="color:var(--brand-color); font-size:24px;"><span id="cart-total-val">0</span> P</span>
+            </div>
+            <button class="btn-full" onclick="handleCheckout()" style="padding:20px; font-size:20px;">결제하기</button>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 베이스 및 유저 상태
+        let usersDB = {}; 
+        let userTiers = {}; 
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        let currentPoints = 0; 
+        let activeCategory = 'all';
+        let cart = [];
+        let orderHistory = []; 
+        let activeCoupons = [];
+        let tempQtyMap = {};
+
+        // 20개 상품 리스트
+        const products = [
+            { id: 1, type: 'snack', name: "해태제과 허니버터칩, 60g", origPrice: 3000, price: 900, discount: 70, sales: 9841, img: "https://i.namu.wiki/i/KjFClXADfkKYOXuuEvS2xho7bjJkU_3Ks6NomxN1_VrhM3lRu-Avtj-sR0w3oW3rwbr8jbc-gAYBDR3Ulv4pQ9DgPocSovpl2g2qpCHyO1_qq6iHmGZ2eJHzcHY7vAqn89BpZwHWuLORIVVDZbdT_w.webp"},
+            { id: 2, type: 'drink', name: "포카리스웨트 500ml", origPrice: 2000, price: 800, discount: 60, sales: 8500, img: "https://image2.lotteimall.com/goods/18/27/51/3068512718_L.jpg" },
+            { id: 3, type: 'snack', name: "롯데웰푸드 ABC 초코쿠키 쿠키앤크림 130g", origPrice: 2500, price: 500, discount: 80, sales: 12050, img: "https://static.megamart.com/product/image/0879/08793102/08793102_1_960.jpg" },
+            { id: 4, type: 'drink', name: "[빙그레] 바나나맛 우유 240ml", origPrice: 1500, price: 750, discount: 50, sales: 7420, img: "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/8233711976/B.webp?909473632" },
+            { id: 5, type: 'snack', name: "두쫀 수제 두바이 쫀득 쿠키 두쫀쿠, 50g, 1박스", origPrice: 3000, price: 600, discount: 80, sales: 15372, img: "https://i.namu.wiki/i/IfMkfV04gfHwNw4FgynVK6SMmCoW0JyBarfg5wT5sEucIlyH387OqkJJq2gxl0cB1VGnCMG-CQjRrrnp7b1Hw17Ej4RQpTy0LKC7FNdd5yvSbB_xjWpNziKAfb0vMVfgHQZhtnQaxfbyTCDTadGcZg.webp"},
+            { id: 6, type: 'drink', name: "코카콜라 제로 490ml", origPrice: 1800, price: 900, discount: 50, sales: 11000, img: "https://images.emarteveryday.co.kr/images/product/8801094083625/9LZtpepLddzFsKah.jpg" },
+            { id: 7, type: 'snack', name: "농심 새우깡 (90G)", origPrice: 2000, price: 800, discount: 60, sales: 5400, img: "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/564d8009-ba9e-4434-a801-104a68ca725b/1280x1280.webp" },
+            { id: 8, type: 'drink', name: "몬스터 에너지 망고로코 (355ML)", origPrice: 2500, price: 1250, discount: 50, sales: 9900, img: "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/a168260f-d835-4700-86bc-2f065e63e001/1280x1280.webp" },
+            { id: 9, type: 'snack', name: "오리온 초코파이 하우스 망고 384g (1개)", origPrice: 3500, price: 1050, discount: 70, sales: 6700, img: "https://images.emarteveryday.co.kr/images/product/8801117584016/8801117584016_1.jpg" },
+            { id: 10, type: 'drink', name: "프리미엄 콜드브루 70ml 10입", origPrice: 8000, price: 3200, discount: 60, sales: 4200, img: "https://coffeemall.net/data/item/1678702695/7KCc7ZKI3.jpg" },
+            { id: 11, type: 'snack', name: "신당동 떡볶이(110g)", origPrice: 2200, price: 1100, discount: 50, sales: 6200, img: "https://sitem.ssgcdn.com/01/93/40/item/1000055409301_i1_1200.jpg" },
+            { id: 12, type: 'snack', name: "롯데웰푸드 명가 찰떡파이 350g", origPrice: 1800, price: 720, discount: 60, sales: 4800, img: "https://static.megamart.com/product/image/0271/02716817/02716817_1_960.jpg" },
+            { id: 13, type: 'snack', name: "널담 뚱카롱 사랑세트 (50g*8개입)", origPrice: 8500, price: 4250, discount: 50, sales: 8100, img: "https://sitem.ssgcdn.com/30/83/60/item/1000841608330_i1_1200.jpg" },
+            { id: 14, type: 'drink', name: "아이스커피 음료캔 칸타타 아이스 바닐라 아메리카노 230ml", origPrice: 3500, price: 1400, discount: 60, sales: 9300, img: "https://img.dongwonmall.com/dwmall/static_root/product_img/main/0036199/003619942_1_a.jpg?f=webp&q=80" },
+            { id: 15, type: 'snack', name: "오리온 썬 갈릭바게트맛 135g", origPrice: 3200, price: 1600, discount: 50, sales: 5500, img: "https://images.emarteveryday.co.kr/images/app/webapps/evd_web2/share/SKU/mall/06/19/8801117681906_1.jpg" },
+            { id: 16, type: 'snack', name: "켈로그 프로틴바K 헤이즐넛&다크초코 (120G)", origPrice: 2500, price: 1250, discount: 50, sales: 7700, img: "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/f655f03a-0a83-4bd6-9a7b-cb0d6c68eb71/1280x1280.webp" },
+            { id: 17, type: 'drink', name: "델몬트포도1.5L", origPrice: 4000, price: 2000, discount: 50, sales: 3400, img: "https://images.emarteveryday.co.kr/images/app/webapps/evd_web2/share/SKU/mall/17/50/8801056475017_1.png" },
+            { id: 18, type: 'snack', name: "포카칩 66g 오리지날 오리온", origPrice: 4500, price: 2250, discount: 50, sales: 10200, img: "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/9168273005/B.webp?417393415" },
+            { id: 19, type: 'snack', name: "오레오 샌드위치 쿠키 민트 초코 (80G)", origPrice: 9000, price: 3600, discount: 60, sales: 11500, img: "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/b165acde-7546-4be5-a7d0-e8dbdc347c9c/1280x1280.webp" },
+            { id: 20, type: 'snack', name: "캐치티니핑 동결건조 하츄핑의 딸기칩 2개 천연과일칩 아기과자 알쏭달쏭", origPrice: 2000, price: 1000, discount: 50, sales: 4100, img: "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5216701319/B.jpg?380000000" }
+        ];
+
+        function updatePointsUI() {
+            document.getElementById('my-pts').innerText = currentPoints.toLocaleString();
+            document.getElementById('mypage-pts').innerText = currentPoints.toLocaleString();
+        }
+
+        function updateCouponUI() {
+            document.getElementById('mypage-coupon-count').innerText = activeCoupons.length + " 장";
+            const select = document.getElementById('couponSelect');
+            select.innerHTML = '<option value="">🎫 쿠폰 선택 (적용 안함)</option>';
+            activeCoupons.forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+            });
+            updateCartUI(); 
+        }
+
+        function switchPage(pageId, navEl = null) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            if(navEl) {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                navEl.classList.add('active');
+            }
+
+            if(pageId === 'home') renderProducts(products, 'grid');
+            if(pageId === 'special') renderProducts(products.filter(p => p.discount >= 50), 'grid-special');
+            if(pageId === 'ranking') {
+                const sorted = [...products].sort((a, b) => b.sales - a.sales);
+                renderProducts(sorted, 'grid-ranking', true);
+            }
+        }
+
+        function filterCategory(cat, btn) {
+            switchPage('home', btn);
+            activeCategory = cat;
+            const filtered = activeCategory === 'all' ? products : products.filter(p => p.type === activeCategory);
+            renderProducts(filtered, 'grid');
+        }
+
+        function executeSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if(!query) return alert("검색어를 입력해주세요.");
+            switchPage('home');
+            const searched = products.filter(p => p.name.includes(query));
+            if(searched.length === 0) document.getElementById('grid').innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; font-weight:800; font-size:18px;">검색 결과가 없습니다.</div>';
+            else renderProducts(searched, 'grid');
+        }
+
+        // 1번 요청: 수량 업데이트 시 클래스를 이용해 모든 탭의 동일 상품 숫자를 동기화
+        function updateTempQty(id, delta) {
+            if (!tempQtyMap[id]) tempQtyMap[id] = 1;
+            tempQtyMap[id] += delta;
+            if (tempQtyMap[id] < 1) tempQtyMap[id] = 1;
+            
+            // 동일한 상품 ID를 가진 모든 span 클래스(랭킹 탭 포함)의 텍스트를 한 번에 바꿉니다.
+            document.querySelectorAll(`.temp-qty-display-${id}`).forEach(el => el.innerText = tempQtyMap[id]);
+        }
+
+        function renderProducts(items, containerId, showRank = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach((p, index) => {
+                if (!tempQtyMap[p.id]) tempQtyMap[p.id] = 1; 
+                let rankHtml = showRank ? `<div class="rank-badge">${index + 1}위</div>` : '';
+                
+                // span에 id 대신 class 적용! (id 중복 방지)
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="card-left">
+                            ${rankHtml}
+                            <div class="img-wrap">
+                                <div class="discount-badge">${p.discount}% OFF</div>
+                                <img src="${p.img}" class="product-img" alt="${p.name}">
+                            </div>
+                            <div class="info-wrap">
+                                <div class="commercial-info">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="sales">(${p.sales.toLocaleString()}개 구매)</span>
+                                    ${p.sales > 10000 ? `<span class="hot-tag">HOT</span>` : ''}
+                                </div>
+                                <div class="product-name">${p.name}</div>
+                                <div class="price-wrap">
+                                    <span class="price-sale">${p.price.toLocaleString()} P</span>
+                                    <span class="price-orig">${p.origPrice.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <div class="qty-selector">
+                                <button onclick="updateTempQty(${p.id}, -1)">-</button>
+                                <span class="temp-qty-display-${p.id}">${tempQtyMap[p.id]}</span>
+                                <button onclick="updateTempQty(${p.id}, 1)">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" onclick="addToCart(${p.id})">장바구니 담기</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openAuthModal(type = 'login') {
+            document.getElementById('authModal').style.display = 'flex';
+            switchAuthTab(type);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function switchAuthTab(type) {
+            if (type === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('tabLogin').classList.add('active-tab');
+                document.getElementById('tabSignup').classList.remove('active-tab');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('signupForm').style.display = 'block';
+                document.getElementById('tabLogin').classList.remove('active-tab');
+                document.getElementById('tabSignup').classList.add('active-tab');
+            }
+        }
+
+        function togglePw(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if(input.type === 'password') {
+                input.type = 'text';
+                btn.innerText = '숨김';
+            } else {
+                input.type = 'password';
+                btn.innerText = '보기';
+            }
+        }
+
+        function processSignup() {
+            const id = document.getElementById('signupId').value;
+            const pw = document.getElementById('signupPw').value;
+            const term1 = document.getElementById('term1').checked;
+            const term2 = document.getElementById('term2').checked;
+            const darkTerm = document.getElementById('darkPatternSub').checked;
+            
+            if(!id) return alert('아이디를 입력해주세요.');
+            
+            const pwRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
+            if(!pwRegex.test(pw)) return alert('비밀번호는 소문자와 특수기호(!@#$등)를 포함하여 8자리 이상이어야 합니다.');
+
+            if (!term1 || !term2) {
+                return alert('필수 약관에 동의하셔야 회원가입이 가능합니다.');
+            }
+
+            if (usersDB[id]) return alert('이미 존재하는 아이디입니다.');
+
+            usersDB[id] = pw;
+            isLoggedIn = true;
+            currentUser = id;
+            
+            let msg = ``;
+            if(darkTerm) {
+                userTiers[id] = 'VVIP';
+                currentPoints = 35000;
+                activeCoupons = [
+                    { id: "c1", name: "🎉 신규 가입 5,000P 할인 쿠폰", type: "fixed", value: 5000 },
+                    { id: "c2", name: "👑 VVIP 전용 10% 추가 할인", type: "percent", value: 10 }
+                ];
+                msg = `회원가입 완료! 🎉\n(VVIP 혜택) 기본가입금+축하금 35,000P 및 VVIP 전용 쿠폰이 지급되었습니다.\n\n(안내) 프리미엄 멤버십 체결로 매월 1,000P가 자동차감됩니다.`;
+            } else {
+                userTiers[id] = '일반';
+                currentPoints = 25000; 
+                activeCoupons = [
+                    { id: "c1", name: "🌱 일반 회원 웰컴 1,000P 할인", type: "fixed", value: 1000 }
+                ];
+                msg = `회원가입 완료! 🎉\n일반 회원으로 가입되어 기본 20,000P 및 가입 축하금 5,000P가 지급되었습니다.`;
+            }
+
+            updatePointsUI();
+            updateCouponUI();
+            updateLoginUI(id);
+            
+            alert(msg);
+            closeAuthModal();
+        }
+
+        function processLogin() {
+            const id = document.getElementById('loginId').value;
+            const pw = document.getElementById('loginPw').value;
+
+            if (!id || !pw) return alert('아이디와 비밀번호를 입력해주세요.');
+            if (usersDB[id] !== pw) return alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+
+            isLoggedIn = true;
+            currentUser = id;
+            
+            updatePointsUI();
+            updateLoginUI(id);
+            alert(`${id}님, 환영합니다!`);
+            closeAuthModal();
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            
+            currentPoints = 0;
+            cart = [];
+            activeCoupons = [];
+            orderHistory = [];
+
+            document.getElementById('topAuthLinks').innerHTML = `<span onclick="openAuthModal('login')">로그인</span> | <span onclick="openAuthModal('signup')">회원가입</span>`;
+            document.getElementById('mypage-name').innerText = '비회원';
+            document.getElementById('mypage-tier').innerHTML = `<span style="color:#999;">등급 없음 (로그인 필요)</span>`;
+            
+            updatePointsUI();
+            updateCouponUI();
+            updateCartUI();
+            updateOrderHistoryUI();
+        }
+
+        function updateLoginUI(id) {
+            document.getElementById('topAuthLinks').innerHTML = `<span><b>${id}</b>님 환영합니다</span> | <span onclick="logout(); alert('안전하게 로그아웃 되었습니다.');" style="color:#888;">로그아웃</span>`;
+            document.getElementById('mypage-name').innerText = id;
+            
+            if(userTiers[id] === 'VVIP') {
+                document.getElementById('mypage-tier').innerHTML = `<strong style="color:#FF9800;">👑 VVIP 프리미엄</strong>`;
+            } else {
+                document.getElementById('mypage-tier').innerHTML = `<strong style="color:#4CAF50;">🌱 일반 회원</strong>`;
+            }
+        }
+
+        function checkWithdraw() {
+            if(!isLoggedIn) return alert("로그인 후 이용할 수 있는 메뉴입니다.");
+            document.getElementById('withdrawModal1').style.display='flex';
+        }
+
+        function executeWithdraw() {
+            alert('회원 탈퇴가 완료되었습니다. 모든 데이터가 삭제되었습니다.');
+            document.getElementById('withdrawModal2').style.display='none';
+            delete usersDB[currentUser];
+            delete userTiers[currentUser];
+            logout();
+            switchPage('home', document.querySelectorAll('.nav-item')[0]);
+        }
+
+        function toggleCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const sidebar = document.getElementById('cartSidebar');
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                setTimeout(() => overlay.style.display = 'none', 300);
+            } else {
+                overlay.style.display = 'flex';
+                setTimeout(() => sidebar.classList.add('active'), 10);
+            }
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const qtyToAdd = tempQtyMap[id] || 1;
+
+            const item = cart.find(i => i.id === id);
+            if(item) item.qty += qtyToAdd;
+            else cart.push({...product, qty: qtyToAdd});
+            
+            // 2번 요청: 장바구니 담고 나면 선택한 수량을 무조건 1로 초기화 시켜줍니다.
+            tempQtyMap[id] = 1;
+            document.querySelectorAll(`.temp-qty-display-${id}`).forEach(el => el.innerText = 1);
+            
+            updateCartUI();
+            alert(`[${product.name}] ${qtyToAdd}개가 장바구니에 담겼습니다!`);
+        }
+
+        function changeCartQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            let subtotal = 0; let totalQty = 0;
+
+            cart.forEach((item) => {
+                subtotal += item.price * item.qty;
+                totalQty += item.qty;
+                
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div style="flex:1;">
+                            <div style="font-weight:900; font-size:15px; margin-bottom:4px; color:#111;">${item.name}</div>
+                            <div style="color:var(--brand-color); font-weight:900; margin-bottom:8px;">${item.price.toLocaleString()} P</div>
+                            <div class="cart-qty-ctrl">
+                                <button onclick="changeCartQty(${item.id}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button onclick="changeCartQty(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <button onclick="changeCartQty(${item.id}, -${item.qty});" style="border:none; background:none; color:#999; height:max-content; padding:5px; font-weight:bold; cursor:pointer;">삭제</button>
+                    </div>
+                `;
+            });
+
+            if(cart.length === 0) container.innerHTML = `<div style="text-align:center; margin-top:80px; color:#999; font-weight:600;">장바구니가 텅 비어있습니다.</div>`;
+
+            let discount = 0;
+            const couponId = document.getElementById('couponSelect').value;
+            if(couponId) {
+                const selectedCoupon = activeCoupons.find(c => c.id === couponId);
+                if(selectedCoupon) {
+                    if(selectedCoupon.type === "fixed") discount = selectedCoupon.value;
+                    else if (selectedCoupon.type === "percent") discount = subtotal * (selectedCoupon.value / 100);
+                }
+            }
+
+            if (discount > subtotal) discount = subtotal; 
+
+            const hasHiddenCharge = document.getElementById('hiddenSubscription').checked;
+            let hiddenFee = hasHiddenCharge ? 10000 : 0;
+            let finalTotal = subtotal - discount + hiddenFee;
+
+            document.getElementById('cart-count').innerText = totalQty;
+            document.getElementById('mypage-cart-count').innerText = totalQty + " 개";
+            document.getElementById('cart-subtotal').innerText = subtotal.toLocaleString() + " P";
+            document.getElementById('cart-discount').innerText = "- " + discount.toLocaleString() + " P";
+            document.getElementById('cart-total-val').innerText = finalTotal.toLocaleString();
+        }
+
+        function handleCheckout() {
+            if (cart.length === 0) return alert("결제할 상품이 없습니다.");
+            if (!isLoggedIn) return alert("로그인이 필요합니다. 회원가입 후 혜택을 누리세요!");
+
+            const hasHiddenCharge = document.getElementById('hiddenSubscription').checked;
+            if (!hasHiddenCharge) {
+                return alert("결제를 진행하려면 '(필수) 안심 퀵 배송료' 항목에 체크하여 동의하셔야 합니다.");
+            }
+
+            const finalCostStr = document.getElementById('cart-total-val').innerText.replace(/,/g, '');
+            const finalCost = parseInt(finalCostStr);
+
+            if(currentPoints < finalCost) return alert(`포인트가 부족합니다! (현재 잔액: ${currentPoints.toLocaleString()}P)`);
+
+            if(confirm(`총 ${finalCost.toLocaleString()} P를 결제하시겠습니까?`)) {
+                currentPoints -= finalCost;
+                updatePointsUI();
+
+                const orderDate = new Date();
+                const dateString = `${orderDate.getFullYear()}-${(orderDate.getMonth()+1).toString().padStart(2,'0')}-${orderDate.getDate().toString().padStart(2,'0')} ${orderDate.getHours()}:${orderDate.getMinutes()}`;
+                const itemNames = cart.map(i => `${i.name} ${i.qty}개`).join(', ');
+
+                orderHistory.push({ date: dateString, items: itemNames, total: finalCost });
+                updateOrderHistoryUI();
+
+                const usedCouponId = document.getElementById('couponSelect').value;
+                if(usedCouponId) {
+                    activeCoupons = activeCoupons.filter(c => c.id !== usedCouponId);
+                    updateCouponUI(); 
+                }
+
+                let msg = `결제가 완벽하게 처리되었습니다!\n\n(주의) 숨겨진 안심 퀵 배송료 10,000P가 추가 결제되었습니다!`;
+                alert(msg);
+                
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                switchPage('mypage', document.querySelectorAll('.nav-item')[5]); 
+            }
+        }
+
+        function updateOrderHistoryUI() {
+            const container = document.getElementById('orderHistoryContainer');
+            if(orderHistory.length === 0) {
+                container.innerHTML = '<div class="empty-history">최근 주문한 내역이 없습니다.<br>진행 중인 초특가를 확인해보세요!</div>';
+                return;
+            }
+            
+            container.innerHTML = ''; 
+            [...orderHistory].reverse().forEach(order => {
+                container.innerHTML += `
+                    <div class="order-card">
+                        <div class="order-card-date">${order.date} 구매 확정</div>
+                        <div style="font-weight:900; margin-bottom:8px; color:#111;">${order.items}</div>
+                        <div style="color:var(--text-sub); font-weight:600;">결제 금액: <span style="color:var(--brand-color); font-weight:900; font-size:16px;">${order.total.toLocaleString()} P</span></div>
+                    </div>
+                `;
+            });
+        }
+
+        let timeInSeconds = 3600; 
+        setInterval(() => {
+            timeInSeconds = timeInSeconds <= 0 ? 3600 : timeInSeconds - 1;
+            let h = Math.floor(timeInSeconds / 3600).toString().padStart(2, '0');
+            let m = Math.floor((timeInSeconds % 3600) / 60).toString().padStart(2, '0');
+            let s = (timeInSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('mainTimer').innerText = `${h} : ${m} : ${s}`;
+            document.getElementById('specialTimer').innerText = `${h}:${m}:${s}`;
+        }, 1000);
+
+        // 초기화
+        updatePointsUI();
+        updateCouponUI();
+        switchPage('home', document.querySelectorAll('.nav-item')[0]);
+
+    </script>
+</body>
+</html>
